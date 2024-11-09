@@ -1,0 +1,17 @@
+{
+    "name": "jhuliocastro/router",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Router\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jhúlio Castro",
+            "email": "jhuliocastro@hotmail.com"
+        }
+    ],
+    "require": {}
+}
