@@ -130,4 +130,22 @@ class Router
         http_response_code(404);
         echo "404 Not Found - Route not found";
     }
+
+    public static function url($name, $params = []): ?string
+    {
+        $instance = self::getInstance();
+        if (!isset($instance->routeNames[$name])) {
+            return null;
+        }
+
+        $uri = $instance->routeNames[$name];
+        foreach ($params as $key => $value) {
+            $uri = str_replace('{' . $key . '}', $value, $uri);
+        }
+
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https://" : "http://";
+        $host = $_SERVER['HTTP_HOST'];
+
+        return $protocol . $host . '/' . $uri;
+    }
 }
