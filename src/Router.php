@@ -19,41 +19,61 @@ class Router
         return self::$instance;
     }
 
-    public static function get($uri, $action): Router
+    /**
+     * @param $uri
+     * @param $action
+     * @return Router
+     */
+    public static function get($uri, $action):Router
     {
-        $instance = self::getInstance();
-        $instance->addRoute('GET', $instance->getPrefixedUri($uri), $action);
-        return $instance;
+        return self::addRoute('GET', $uri, $action);
     }
 
-    public static function post($uri, $action): Router
+    /**
+     * @param $uri
+     * @param $action
+     * @return Router
+     */
+    public static function post($uri, $action):Router
     {
-        $instance = self::getInstance();
-        $instance->addRoute('POST', $instance->getPrefixedUri($uri), $action);
-        return $instance;
+        return self::addRoute('POST', $uri, $action);
     }
 
-    public static function put($uri, $action): Router
+    /**
+     * @param $uri
+     * @param $action
+     * @return Router
+     */
+    public static function put($uri, $action):Router
     {
-        $instance = self::getInstance();
-        $instance->addRoute('PUT', $instance->getPrefixedUri($uri), $action);
-        return $instance;
+        return self::addRoute('PUT', $uri, $action);
     }
 
-    public static function patch($uri, $action): Router
+    /**
+     * @param $uri
+     * @param $action
+     * @return Router
+     */
+    public static function patch($uri, $action):Router
     {
-        $instance = self::getInstance();
-        $instance->addRoute('PATCH', $instance->getPrefixedUri($uri), $action);
-        return $instance;
+        return self::addRoute('PATCH', $uri, $action);
     }
 
-    public static function delete($uri, $action): Router
+    /**
+     * @param $uri
+     * @param $action
+     * @return Router
+     */
+    public static function delete($uri, $action):Router
     {
-        $instance = self::getInstance();
-        $instance->addRoute('DELETE', $instance->getPrefixedUri($uri), $action);
-        return $instance;
+        return self::addRoute('DELETE', $uri, $action);
     }
 
+    /**
+     * @param array $options
+     * @param callable $callback
+     * @return void
+     */
     public static function group(array $options, callable $callback): void
     {
         $instance = self::getInstance();
@@ -65,10 +85,15 @@ class Router
 
         call_user_func($callback);
 
-        // Restaura o prefixo original após o grupo
         $instance->groupPrefix = $originalPrefix;
     }
 
+    /**
+     * @param $method
+     * @param $uri
+     * @param $action
+     * @return Router
+     */
     private static function addRoute($method, $uri, $action):Router
     {
         $instance = self::getInstance();
@@ -77,6 +102,10 @@ class Router
         return $instance;
     }
 
+    /**
+     * @param $name
+     * @return $this
+     */
     public function name($name): Router
     {
         $lastRoute = end($this->routes);
@@ -87,11 +116,18 @@ class Router
         return $this;
     }
 
+    /**
+     * @param $uri
+     * @return string
+     */
     private function getPrefixedUri($uri): string
     {
         return trim($this->groupPrefix . '/' . trim($uri, '/'), '/');
     }
 
+    /**
+     * @return void
+     */
     public function dispatch(): void
     {
         $method = $_SERVER['REQUEST_METHOD'];
@@ -131,7 +167,12 @@ class Router
         echo "404 Not Found - Route not found";
     }
 
-    public static function url($name, $params = []): ?string
+    /**
+     * @param string $name
+     * @param array $params
+     * @return string|null
+     */
+    public static function url(string $name, array $params = []): ?string
     {
         $instance = self::getInstance();
         if (!isset($instance->routeNames[$name])) {
