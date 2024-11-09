@@ -5,6 +5,7 @@ class Router
 {
     private static ?Router $instance = null;
     private array $routes = [];
+    private array $routeNames = [];
     private string $groupPrefix = '';
 
     private function __construct() {}
@@ -68,9 +69,22 @@ class Router
         $instance->groupPrefix = $originalPrefix;
     }
 
-    private function addRoute($method, $uri, $action): void
+    private static function addRoute($method, $uri, $action):Router
     {
-        $this->routes[$method][$uri] = $action;
+        $instance = self::getInstance();
+        $fullUri = $instance->getPrefixedUri($uri);
+        $instance->routes[$method][$fullUri] = $action;
+        return $instance;
+    }
+
+    public function name($name): Router
+    {
+        $lastRoute = end($this->routes);
+        if ($lastRoute) {
+            $uri = key($lastRoute);
+            $this->routeNames[$name] = $uri;
+        }
+        return $this;
     }
 
     private function getPrefixedUri($uri): string
@@ -108,6 +122,6 @@ class Router
         }
 
         http_response_code(404);
-        echo "404 Not Found";
+        echo "404 Not Found - Route not found";
     }
 }
