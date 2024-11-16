@@ -4,7 +4,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Router\\": "src/"
+            "Core\\": "core/",
+            "App\\Controllers\\": "app/Controllers/"
         }
     },
     "authors": [
@@ -13,5 +14,7 @@
             "email": "jhuliocastro@hotmail.com"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "symfony/var-dumper": "^7.1"
+    }
 }
